@@ -3,7 +3,7 @@ import { StrictMode, CSSProperties } from 'react';
 import clsx from 'clsx';
 
 import { Article } from './components/article/Article';
-import { ArticleParamsForm, ArticleParamsFormProps } from './components/article-params-form/ArticleParamsForm';
+import { ArticleParamsForm } from './components/article-params-form/ArticleParamsForm';
 import { defaultArticleState, ArticleStateType } from './constants/articleProps';
 import { useState } from 'react';
 
@@ -15,10 +15,6 @@ const root = createRoot(domNode);
 
 const App = () => {
 	const [articleState, setArticleState] = useState<ArticleStateType>(defaultArticleState);
-
-    const updateNewSettings: ArticleParamsFormProps['newArticleStateType'] = (newSettings) => {
-        setArticleState(newSettings);
-    };
 
 	return (
 		<div
@@ -33,7 +29,7 @@ const App = () => {
 				} as CSSProperties
 			}>
 			<ArticleParamsForm 
-				newArticleStateType={updateNewSettings}
+				newArticleStateType={setArticleState}
 			/>
 			<Article />
 		</div>

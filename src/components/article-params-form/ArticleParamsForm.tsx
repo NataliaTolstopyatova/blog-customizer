@@ -23,11 +23,7 @@ export type ArticleParamsFormProps = {
 export const ArticleParamsForm = ({ newArticleStateType }: ArticleParamsFormProps) => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const [formState, setFormState] = useState(defaultArticleState);
-	const rootRef = useRef<HTMLDivElement>(null);
-
-	const toggleSidebar = () => {
-		setIsSidebarOpen(!isSidebarOpen);
-	};
+	const rootRef = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -36,12 +32,16 @@ export const ArticleParamsForm = ({ newArticleStateType }: ArticleParamsFormProp
 			}
 		};
 
-		document.addEventListener('mousedown', handleClickOutside);
+		if (isSidebarOpen) {
+			document.addEventListener('mousedown', handleClickOutside);
+		} else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
 
 		return () => {
 			document.removeEventListener('mousedown', handleClickOutside);
 		};
-	}, [rootRef]);
+	}, [isSidebarOpen, rootRef]);
 
 	const handleOptionChange = (key: string) => (value: any) => {
         setFormState({
@@ -64,7 +64,7 @@ export const ArticleParamsForm = ({ newArticleStateType }: ArticleParamsFormProp
 
 	return (
 		<div ref={rootRef}>
-			<ArrowButton onClick={toggleSidebar} isOpen={isSidebarOpen}/>
+			<ArrowButton onClick={() => setIsSidebarOpen(!isSidebarOpen)} isOpen={isSidebarOpen}/>
 			<aside className={clsx(styles.container, isSidebarOpen && styles.container_open)}>
 				<form className={styles.form} onSubmit={handleSubmit} onReset={handleReset}>
 					<Text size={31} weight={800} uppercase>
